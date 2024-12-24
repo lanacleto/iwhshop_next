@@ -1,9 +1,8 @@
-// pages/api/getSponsorID.js
 import { google } from "googleapis";
 
-const PRIVATE_KEY = process.env.PRIVATE_KEY.replace(/\\n/g, '\n'); // Handle new lines in private key
-const CLIENT_EMAIL = process.env.CLIENT_EMAIL;
-const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
+const PRIVATE_KEY = process.env.PRIVATE_KEY?.replace(/\\n/g, '\n') || 'default-private-key'; // Handle new lines in private key
+const CLIENT_EMAIL = process.env.CLIENT_EMAIL || 'default-client-email';
+const SPREADSHEET_ID = process.env.SPREADSHEET_ID || 'default-spreadsheet-id';
 
 async function authSheets() {
   const auth = new google.auth.GoogleAuth({
@@ -27,6 +26,8 @@ export default async function handler(req, res) {
 
   const userIdHHF = req.query.id;
   const { sheets } = await authSheets();
+
+  console.log('SPREADSHEET_ID:', SPREADSHEET_ID); // Log for debugging
 
   try {
     const getRows = await sheets.spreadsheets.values.get({
